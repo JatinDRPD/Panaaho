@@ -5,15 +5,17 @@
     <div class="row">
         <div class="col-8 offset-2">
     <h3>Create a New Listing</h3>
-    <form method="POST" action="/listings">
+    <form method="POST" action="/listings" novalidate class="needs-validation">
 
      <div class="mb-3">
         <label for="title" class="form-label">title</label>
       <input name="listing[title]" 
       placeholder="enter title" 
       type="text"
-       class="form-control"/>
+       class="form-control"
+       required/>
       <!-- object with key title and value in the input -->
+       <div class="valid-feedback">Title looks good</div>
      </div>   
     
     
@@ -23,7 +25,9 @@
         name="listing[description]"
         placeholder="enter description"
         class="form-control"
+        required
       ></textarea>
+      <div class="invalid-feedback">Description should be correct</div>
     </div>
 
     <div class="mb-3">
@@ -33,32 +37,37 @@
         placeholder="enter image URL/Link"
         type="text"
         class="form-control"
-      />
+        />
+        <!-- <div class="invalid-feedback"></div> -->
     </div>
      <!-- if we want ki price and country ek line me aaye then we use .row then give col-4 and col-8 to both of them respectively till medium-->
       <div class="row">
      <div class="mb-3 col-md-4">
         <label for="price" class="form-label">price</label>
-              <input name="listing[price]" placeholder="enter price" type="number" class="form-control"/>
-
+              <input name="listing[price]" placeholder="enter price" class="form-control" required/>
+      <div class="invalid-feedback">Price should be correct</div>
       </div>
 
       
 <div class="mb-3 col-md-8">
     <label for="country" class="form-label">country</label>
-      <input name="listing[country]" placeholder="enter country" type="text" class="form-control" />
+      <input name="listing[country]" placeholder="enter country" type="text" class="form-control" required />
+          <div class="invalid-feedback">country should be correct</div>
 
 </div>
 </div>
 
 <div class="mb-3">
-    <label for="locatioin" class="form-label">location</label>
+    <label for="location" class="form-label" >location</label>
 <input
         class="form-control"
         name="listing[location]"
         placeholder="enter location"
         type="text"
+        required
       />
+            <div class="invalid-feedback">Location should be correct</div>
+
 </div>
       <button class="btn btn-dark add-btn mt-3 mb-3">Add</button>
       <br><br>

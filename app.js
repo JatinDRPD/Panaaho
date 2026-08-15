@@ -9,7 +9,8 @@ const path=require("path");
 const ejsMate=require("ejs-mate");
 
 const MongoURL = 'mongodb://127.0.0.1:27017/Panaaho';
-
+const wrapAsync=require("./utils/wrapAsync.js");
+const ExpressError=require("./utils/ExpressError.js");
 
 async function main() {
     await mongoose.connect(MongoURL);
@@ -71,11 +72,29 @@ app.get("/listings/:id",async(req,res)=>{
 });
 
 //Create Route
-app.post("/listings", async (req, res) => {
-  const newListing = new Listing(req.body.listing);//in new.ejs we have stored it in form of key value pair so we get here like this
-  await newListing.save();
-  res.redirect("/listings");
-});
+// app.post("/listings", async (req, res,next) => {
+//   try{
+//         const newListing = new Listing(req.body.listing);//in new.ejs we have stored it in form of key value pair so we get here like this
+//       await newListing.save();
+//       res.redirect("/listings");
+//     }catch(err)
+//   {
+//     next(err);//it will ppass to error handling middleware-*
+//   }
+ 
+// });
+//Create Route
+app.post("/listings",
+  wrapAsync( async (req, res,next) => {
+
+      const newListing = new Listing(req.body.listing);//in new.ejs we have stored it in form of key value pair so we get here like this
+      await newListing.save();
+      res.redirect("/listings");
+  
+ 
+}));
+
+
 
 //Edit Route
 app.get("/listings/:id/edit", async (req, res) => {
@@ -97,6 +116,19 @@ app.delete("/listings/:id", async (req, res) => {
   let deletedListing = await Listing.findByIdAndDelete(id);
   console.log(deletedListing);
   res.redirect("/listings");
+});
+
+app.all("/{*splat}",(req,res,next)=>
+{
+  next(new ExpressError(404,"Page not found"));//for any type of wrong rout error
+});
+
+app.use((err,req,res,next)=>
+{
+  // res.send("Problem Occured")
+  let {statusCode,msg}=err;
+  res.status(statusCode).send(msg);
+
 });
 
 
