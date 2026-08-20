@@ -63,7 +63,7 @@ body{
 
  /* cards Styling */
 
- .card{
+ .listing-card{
     border:none !important;
     margin-bottom: 2rem;
 
@@ -110,8 +110,9 @@ body{
 }
 /* edit page */
 .edit-btn{
-    background-color: #fe424d !important;
+   background-color: #fe424d !important;
    border: none !important;
+   /* padding-bottom: 1rem; */
   
 }
 /* show page */
