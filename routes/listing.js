@@ -54,6 +54,7 @@ router.post("/",validateListing,
 
       const newListing = new Listing(req.body.listing);//in new.ejs we have stored it in form of key value pair so we get here like this
       await newListing.save();
+      req.flash("success","New Listing Created!");
       res.redirect("/listings"); 
 }));
 

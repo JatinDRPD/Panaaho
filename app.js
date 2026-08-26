@@ -7,15 +7,19 @@ const Listing = require('./models/listing');
 const methodOverride = require("method-override");
 const path=require("path");
 const ejsMate=require("ejs-mate");
+const flash=require("connect-flash");
+
 
 const MongoURL = 'mongodb://127.0.0.1:27017/Panaaho';
 const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
 const {listingSchema,reviewSchema}=require("./schema.js");//JOI for validate listing function
 const Review=require("./models/review.js");
+const session=require("express-session");
 
 const listings=require("./routes/listing.js");
 const reviews=require("./routes/review.js");
+const { expression } = require('joi');
 
 async function main() {
     await mongoose.connect(MongoURL);
@@ -34,15 +38,33 @@ main().then(() => {
     console.error('Error connecting to MongoDB:', err);
 });
 
-
-
-
-
+const sessionOptions={
+    secret:"MySuperSecretCode",
+    resave:false,
+    saveUninitialized:true,
+    cookie:{
+      expires: Date.now() + 7*24*60*60*1000,
+      maxAge:7*24*60*60*1000,
+      httpOnly:true
+    }
+  
+};
 
 //INDEX ROUTE
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
+
+app.use(session(sessionOptions));
+
+app.use(flash());
+
+app.use((req,res,next)=>{
+  res.locals.success=req.flash("success");
+  next();
+});
+
+
 
 
 
