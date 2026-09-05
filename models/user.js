@@ -8,5 +8,5 @@ const userSchema = new Schema({
         required:true
     }
 });
-userSchema.plugin(passportLocalMongoose);
+userSchema.plugin(passportLocalMongoose);//this will add username and password field to the schema and also add some methods to the schema like authenticate,serializeUser,deserializeUser
 module.exports=mongoose.model("User",userSchema);
