@@ -27,14 +27,20 @@
                   <div class="invalid-feedback">description should be correct</div>
 
       </div>
-     
+      
+      <div>
+        Original Listing Image:<br />
+        <img src="<%= origImageUrl %>" alt="Original listing image" />
+      </div>
+
       <div class="mb-3">
-        <label for="image" class="form-label">Image</label>
+        <label for="image" class="form-label">Upload new Image</label>
         <input
           name="listing[image][url]"
           value="<%= listing.image.url %>"
-          type="text"
-          class="form-control" required
+          type="file"
+          enctype="multipart/form-data"
+          class="form-control"
         />
                   <div class="invalid-feedback">image should be correct</div>
 

@@ -1,4 +1,11 @@
                                         //PANAAHO
+if(process.env.NODE_ENV!=="production")//ye development mode me hi chalega production ke time node_env=production hoga
+{
+  require('dotenv').config();//ye development mode me hi chalega production ke time node_env=production hoga
+}
+
+
+
 
 const express = require('express');
 const app = express();
@@ -54,10 +61,10 @@ const sessionOptions={
   
 };
 
-//INDEX ROUTE
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-});
+// //INDEX ROUTE
+// app.get('/', (req, res) => {
+//     res.send('Hello World!');
+// });
 
 app.use(session(sessionOptions));
 
