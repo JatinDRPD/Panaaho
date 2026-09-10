@@ -1,4 +1,7 @@
                                         //PANAAHO
+
+
+
 if(process.env.NODE_ENV!=="production")//ye development mode me hi chalega production ke time node_env=production hoga
 {
   require('dotenv').config();//ye development mode me hi chalega production ke time node_env=production hoga
@@ -19,7 +22,8 @@ const passport=require("passport");
 const LocalStrategy=require("passport-local");
 const User=require("./models/user.js");
 
-const MongoURL = 'mongodb://127.0.0.1:27017/Panaaho';
+// const MongoURL = 'mongodb://127.0.0.1:27017/Panaaho';
+const dbUrl=process.env.ATLASDB_URL;
 const wrapAsync=require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js");
 const {listingSchema,reviewSchema}=require("./schema.js");//JOI for validate listing function
@@ -27,13 +31,14 @@ const {listingSchema,reviewSchema}=require("./schema.js");//JOI for validate lis
 const Review=require("./models/review.js");
 const userRouter=require("./routes/user.js");
 const session=require("express-session");
+const {MongoStore}=require("connect-mongo");//ye session ko mongoDB me store karega
 
 const listingRouter=require("./routes/listing.js");
 const reviewRouter=require("./routes/review.js");
 const { expression } = require('joi');
 
 async function main() {
-    await mongoose.connect(MongoURL);
+    await mongoose.connect(dbUrl);
 }
 
 app.set("view engine", "ejs");
@@ -49,7 +54,16 @@ main().then(() => {
     console.error('Error connecting to MongoDB:', err);
 });
 
+const store=MongoStore.create({
+  mongoUrl:dbUrl,
+  touchAfter:24*60*60,//24 hours
+  crypto:{
+    secret:"MySuperSecretCode"
+  }
+});
+
 const sessionOptions={
+    store:store,//mongo store me session ko store karne ke liye
     secret:"MySuperSecretCode",
     resave:false,
     saveUninitialized:true,
@@ -65,6 +79,7 @@ const sessionOptions={
 // app.get('/', (req, res) => {
 //     res.send('Hello World!');
 // });
+
 
 app.use(session(sessionOptions));
 
