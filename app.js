@@ -58,13 +58,13 @@ const store=MongoStore.create({
   mongoUrl:dbUrl,
   touchAfter:24*60*60,//24 hours
   crypto:{
-    secret:"MySuperSecretCode"
+    secret:"process.env.SECRET"
   }
 });
 
 const sessionOptions={
     store:store,//mongo store me session ko store karne ke liye
-    secret:"MySuperSecretCode",
+    secret:"process.env.SECRET",
     resave:false,
     saveUninitialized:true,
     cookie:{
